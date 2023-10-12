@@ -1,0 +1,100 @@
+
+	IN
+	STO	A
+	IN
+	STO	B
+	IN
+	STO	C
+	IN
+	STO	D
+	STO	E	
+	
+###it multiply c by x and add b
+
+START	LDA	C
+	BRZ	END1
+	SUB	ONE
+	STO	C
+	LDA	TOTAL
+	ADD	D
+	STO	TOTAL
+	SUB	D
+
+##checks for overflow and add b to cx	
+
+	BRP	START
+	BR	OVERFLOW
+END1	LDA	TOTAL
+	ADD	B
+	STO	FINAL
+
+###checks for overflow that if the result is greater than 999 after adding cx to b 
+	
+	
+	SUB	B
+	BRP	START1
+	BR	OVERFLOW
+	
+###it multipy (b+cx) by x to give (bx + cx^2)
+
+
+START1	LDA	E
+	BRZ	END2
+	SUB	ONE
+	STO	E
+	LDA	TOTAL1
+	ADD	FINAL
+	STO	TOTAL1
+	SUB	FINAL
+
+### checks for overflow	that if the result is greater than 999 after multiplying (cx+b) by x
+	
+	BRP	START1
+	BR	OVERFLOW
+END2	LDA	TOTAL1
+	
+### adds A to (bx + cx^2)
+	
+	ADD	A
+	STO	TOTAL3
+### checks for overflow	that it the result is greater than 999 after adding A to (cx^2+b)
+	SUB	A
+	BRP	NEXT
+	BR	OVERFLOW
+NEXT	LDA	TOTAL3
+	OUT
+	BR	RESET
+OVERFLOW	LDA	NINE
+	OUT
+	BR	RESET
+	
+RESET	LDA	ZERO
+	STO	FINAL
+	STO	ANS
+	STO	TOTAL
+	STO	TOTAL1
+	STO	FINAL
+	STO	TOTAL3
+	HLT
+
+A	DAT
+B	DAT
+C	DAT
+D	DAT
+E	DAT
+F	DAT
+G	DAT
+FINAL	DAT
+ONE	DAT	001
+TOTAL	DAT	000
+TOTAL1	DAT	000
+NINE	DAT	999
+TOTAL3	DAT
+
+
+
+
+
+
+
+
